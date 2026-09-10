@@ -44,3 +44,7 @@ textarea {
 .table-wrap {
   @apply card overflow-x-auto -mx-4 sm:mx-0 rounded-none sm:rounded-2xl border-x-0 sm:border-x;
 }
+
+nav.fixed {
+  padding-bottom: env(safe-area-inset-bottom);
+}

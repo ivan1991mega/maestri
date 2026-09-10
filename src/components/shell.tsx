@@ -31,7 +31,7 @@ export function Shell({ name, role, children }: Props) {
   }
 
   return (
-    <div className="min-h-dvh pb-16 md:pb-0">
+    <div className="min-h-dvh pb-24 md:pb-0">
       <header className="sticky top-0 z-20 border-b border-slate-200/80 bg-white/90 backdrop-blur dark:border-slate-800 dark:bg-slate-950/90">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
           <div className="flex items-center gap-6">
@@ -58,15 +58,8 @@ export function Shell({ name, role, children }: Props) {
             <span className="hidden sm:block text-slate-500 dark:text-slate-400 max-w-[10rem] truncate">
               {name}
             </span>
-            <button onClick={logout} className="btn-ghost py-1.5 hidden md:inline-flex">
+            <button onClick={logout} className="btn-ghost py-1.5 text-xs sm:text-sm">
               Esci
-            </button>
-            <button
-              className="btn-ghost md:hidden px-3"
-              onClick={() => setOpen((v) => !v)}
-              aria-label="Menu"
-            >
-              {open ? "Chiudi" : "Menu"}
             </button>
           </div>
         </div>

@@ -4,15 +4,19 @@ import bcrypt from "bcryptjs";
 const prisma = new PrismaClient();
 
 async function main() {
+  await prisma.user.deleteMany({
+    where: { email: { in: ["mario@scuola.it", "admin@scuola.it"] } },
+  });
+
   const adminPass = await bcrypt.hash("admin123", 10);
-  const maestroPass = await bcrypt.hash("maestro123", 10);
+  const maestroPass = await bcrypt.hash("jappo123", 10);
 
   await prisma.user.upsert({
-    where: { email: "admin@scuola.it" },
-    update: {},
+    where: { email: "stetasca@gmail.com" },
+    update: { name: "Stefano Tasca", role: Role.ADMIN, active: true },
     create: {
-      email: "admin@scuola.it",
-      name: "Amministratore",
+      email: "stetasca@gmail.com",
+      name: "Stefano Tasca",
       passwordHash: adminPass,
       role: Role.ADMIN,
       hourlyRate: 0,
@@ -20,11 +24,11 @@ async function main() {
   });
 
   await prisma.user.upsert({
-    where: { email: "mario@scuola.it" },
-    update: {},
+    where: { email: "jappotasca@gmail.com" },
+    update: { name: "Jacopo Tasca", role: Role.INSTRUCTOR, active: true },
     create: {
-      email: "mario@scuola.it",
-      name: "Mario Rossi",
+      email: "jappotasca@gmail.com",
+      name: "Jacopo Tasca",
       passwordHash: maestroPass,
       role: Role.INSTRUCTOR,
       hourlyRate: 28,
@@ -37,8 +41,7 @@ async function main() {
     create: { id: "app" },
   });
 
-  console.log("Seed ok. Admin: admin@scuola.it / admin123");
-  console.log("Maestro: mario@scuola.it / maestro123");
+  console.log("Seed ok");
 }
 
 main()

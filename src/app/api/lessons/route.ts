@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireUser } from "@/lib/auth";
 import { syncLessonToCalendar } from "@/lib/google-calendar";
+import { monthRangeRome } from "@/lib/lessons";
 
 export async function GET(req: Request) {
   const user = await requireUser();
@@ -16,9 +17,7 @@ export async function GET(req: Request) {
   else if (userId) where.userId = userId;
 
   if (month && /^\d{4}-\d{2}$/.test(month)) {
-    const start = new Date(`${month}-01T00:00:00`);
-    const end = new Date(start);
-    end.setMonth(end.getMonth() + 1);
+    const { start, end } = monthRangeRome(month);
     where.startAt = { gte: start, lt: end };
   }
 

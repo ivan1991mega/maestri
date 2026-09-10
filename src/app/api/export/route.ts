@@ -2,9 +2,7 @@ import { NextResponse } from "next/server";
 import ExcelJS from "exceljs";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/auth";
-import { formatEuro, netHours } from "@/lib/lessons";
-import { format } from "date-fns";
-import { it } from "date-fns/locale";
+import { formatEuro, netHours, monthRangeRome, romeDate, romeTime, romeWeekday, romeMonthLabel } from "@/lib/lessons";
 
 export async function GET(req: Request) {
   const admin = await requireAdmin();
@@ -17,9 +15,7 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: "Mese e utente obbligatori" }, { status: 400 });
   }
 
-  const start = new Date(`${month}-01T00:00:00`);
-  const end = new Date(start);
-  end.setMonth(end.getMonth() + 1);
+  const { start, end } = monthRangeRome(month);
 
   const user = await prisma.user.findUnique({ where: { id: userId } });
   if (!user) return NextResponse.json({ error: "Utente non trovato" }, { status: 404 });
@@ -63,10 +59,10 @@ export async function GET(req: Request) {
     totalHours += hours;
     totalPay += pay;
     sheet.addRow({
-      data: format(l.startAt, "dd/MM/yyyy"),
-      giorno: format(l.startAt, "EEEE", { locale: it }),
-      inizio: format(l.startAt, "HH:mm"),
-      fine: format(l.endAt, "HH:mm"),
+      data: romeDate(l.startAt),
+      giorno: romeWeekday(l.startAt),
+      inizio: romeTime(l.startAt),
+      fine: romeTime(l.endAt),
       pausa: l.breakMinutes,
       luogo: l.location,
       note: l.notes || "",
@@ -87,7 +83,7 @@ export async function GET(req: Request) {
   const info = workbook.addWorksheet("Riepilogo");
   info.addRow(["Maestro", user.name]);
   info.addRow(["Email", user.email]);
-  info.addRow(["Mese", format(start, "MMMM yyyy", { locale: it })]);
+  info.addRow(["Mese", romeMonthLabel(start)]);
   info.addRow(["Lezioni", lessons.length]);
   info.addRow(["Ore nette", Math.round(totalHours * 100) / 100]);
   info.addRow(["Tariffa oraria", formatEuro(rate)]);

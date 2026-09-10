@@ -1,0 +1,46 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light dark;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  @apply bg-ice-50 text-slate-800 antialiased dark:bg-slate-950 dark:text-slate-100;
+}
+
+input,
+select,
+textarea {
+  @apply w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-800 outline-none transition
+    focus:border-ice-800 focus:ring-2 focus:ring-ice-800/10
+    dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-sky-400 dark:focus:ring-sky-400/20;
+}
+
+.btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium transition disabled:opacity-50 min-h-11;
+}
+
+.btn-primary {
+  @apply btn bg-ice-800 text-white hover:bg-ice-900 dark:bg-sky-500 dark:text-slate-950 dark:hover:bg-sky-400;
+}
+
+.btn-ghost {
+  @apply btn bg-white text-slate-700 border border-slate-200 hover:bg-ice-100
+    dark:bg-slate-900 dark:text-slate-200 dark:border-slate-700 dark:hover:bg-slate-800;
+}
+
+.card {
+  @apply rounded-2xl border border-slate-200/80 bg-white shadow-sm
+    dark:border-slate-800 dark:bg-slate-900 dark:shadow-none;
+}
+
+.table-wrap {
+  @apply card overflow-x-auto -mx-4 sm:mx-0 rounded-none sm:rounded-2xl border-x-0 sm:border-x;
+}

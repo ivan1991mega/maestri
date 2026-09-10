@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  INSTRUCTOR
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String
+  passwordHash String
+  role         Role     @default(INSTRUCTOR)
+  hourlyRate   Decimal  @default(25) @db.Decimal(10, 2)
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  lessons      Lesson[]
+}
+
+model Lesson {
+  id               String   @id @default(cuid())
+  userId           String
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  startAt          DateTime
+  endAt            DateTime
+  breakMinutes     Int      @default(0)
+  location         String
+  notes            String?
+  googleEventId    String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([userId, startAt])
+}
+
+model Setting {
+  id                   String  @id @default("app")
+  googleCalendarId     String?
+  googleServiceAccount String? @db.Text
+}

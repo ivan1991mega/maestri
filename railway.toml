@@ -1,0 +1,6 @@
+[build]
+builder = "NIXPACKS"
+
+[deploy]
+startCommand = "npx prisma migrate deploy && npx tsx prisma/seed.ts && npm run start"
+restartPolicyType = "ON_FAILURE"

@@ -10,6 +10,7 @@ async function main() {
 
   const adminPass = await bcrypt.hash("admin123", 10);
   const maestroPass = await bcrypt.hash("jappo123", 10);
+  const enricoPass = await bcrypt.hash("enrico123", 10);
 
   await prisma.user.upsert({
     where: { email: "stetasca@gmail.com" },
@@ -35,6 +36,23 @@ async function main() {
     },
   });
 
+  await prisma.user.upsert({
+    where: { email: "zen.enrico@gmail.com" },
+    update: {
+      name: "Enrico",
+      role: Role.INSTRUCTOR,
+      active: true,
+      passwordHash: enricoPass,
+    },
+    create: {
+      email: "zen.enrico@gmail.com",
+      name: "Enrico",
+      passwordHash: enricoPass,
+      role: Role.INSTRUCTOR,
+      hourlyRate: 28,
+    },
+  });
+
   await prisma.setting.upsert({
     where: { id: "app" },
     update: {},
@@ -42,6 +60,7 @@ async function main() {
   });
 
   console.log("Seed ok");
+  console.log("Enrico: zen.enrico@gmail.com / enrico123");
 }
 
 main()

@@ -15,13 +15,14 @@ async function main() {
   } catch (e) {}
   try {
     await prisma.user.updateMany({
-      where: { email: "enrico@zen.it" },
-      data: { email: "zen.enrcio@gmail.com" },
+      where: { email: { in: ["enrico@zen.it", "zen.enrcio@gmail.com"] } },
+      data: { email: "zen.enrico@gmail.com", name: "Enrico" },
     });
   } catch (e) {}
 
   const adminPass = await bcrypt.hash("admin123", 10);
   const maestroPass = await bcrypt.hash("jappo123", 10);
+  const enricoPass = await bcrypt.hash("enrico123", 10);
 
   await prisma.user.upsert({
     where: { email: "stetasca@gmail.com" },
@@ -47,6 +48,23 @@ async function main() {
     },
   });
 
+  await prisma.user.upsert({
+    where: { email: "zen.enrico@gmail.com" },
+    update: {
+      name: "Enrico",
+      role: "INSTRUCTOR",
+      active: true,
+      passwordHash: enricoPass,
+    },
+    create: {
+      email: "zen.enrico@gmail.com",
+      name: "Enrico",
+      passwordHash: enricoPass,
+      role: "INSTRUCTOR",
+      hourlyRate: 28,
+    },
+  });
+
   await prisma.setting.upsert({
     where: { id: "app" },
     update: {},
@@ -56,6 +74,7 @@ async function main() {
   console.log("Seed ok");
   console.log("Admin: stetasca@gmail.com / admin123");
   console.log("Maestro: jappotasca@gmail.com / jappo123");
+  console.log("Enrico: zen.enrico@gmail.com / enrico123");
 }
 
 main()
